@@ -33,6 +33,10 @@ services:
         fromDatabase:
           name: grocery-store-db
           property: password
+      - key: DATABASE_URL
+        fromDatabase:
+          name: grocery-store-db
+          property: connectionString
 
 databases:
   - name: grocery-store-db
