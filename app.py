@@ -795,14 +795,22 @@ def forbidden_error(error):
 @app.route('/health')
 def health_check():
     try:
-        # Simple check first
-        return jsonify({"status": "healthy", "app": "running"}), 200
+        # Basic app health
+        response = {"status": "healthy", "app": "running"}
         
-        # Database check (uncomment after initial deployment works)
-        # with get_db_cursor() as (conn, cursor):
-        #     cursor.execute("SELECT 1")
-        #     cursor.fetchone()
-        # return jsonify({"status": "healthy", "database": "connected"}), 200
+        # Test database connection
+        try:
+            with get_db_cursor() as (conn, cursor):
+                cursor.execute("SELECT 1")
+                cursor.fetchone()
+            response["database"] = "connected"
+        except Exception as db_error:
+            logger.warning(f"Database health check failed: {db_error}")
+            response["database"] = "disconnected"
+            response["db_error"] = str(db_error)
+            
+        return jsonify(response), 200
+        
     except Exception as e:
         return jsonify({"status": "unhealthy", "error": str(e)}), 500
 
