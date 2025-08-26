@@ -1,2 +1,1 @@
-web: gunicorn app:app
-release: python init_db.py
+web: gunicorn -c gunicorn.conf.py app:app
