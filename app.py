@@ -819,6 +819,40 @@ def health_check():
 def test_endpoint():
     return jsonify({"message": "App is working!", "timestamp": datetime.now().isoformat()})
 
+# Database setup endpoint for manual initialization
+@app.route('/setup-db')
+def setup_database():
+    """Manual database setup endpoint"""
+    try:
+        # Import the initialization function
+        import subprocess
+        import sys
+        
+        # Run the database initialization script
+        result = subprocess.run([sys.executable, 'init_render_db.py'], 
+                               capture_output=True, text=True, timeout=60)
+        
+        if result.returncode == 0:
+            return jsonify({
+                "status": "success",
+                "message": "Database initialized successfully",
+                "output": result.stdout
+            })
+        else:
+            return jsonify({
+                "status": "error",
+                "message": "Database initialization failed",
+                "error": result.stderr,
+                "output": result.stdout
+            }), 500
+            
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": "Failed to run database setup",
+            "error": str(e)
+        }), 500
+
 if __name__ == '__main__':
     # Production configuration for Render deployment
     host = os.getenv('HOST', '0.0.0.0')  # Changed to 0.0.0.0 for production
