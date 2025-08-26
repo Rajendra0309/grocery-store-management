@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Product - Grocery Store Management{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Edit Product</h2>
+            </div>
+            <div class="card-body">
+                <form id="productForm">
+                    <input type="hidden" id="productId" name="product_id" value="{{ product_id }}">
+                    
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="productName" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="uomId" class="form-label">Unit of Measurement</label>
+                        <select class="form-select" id="uomId" name="uom_id" required>
+                            <option value="" selected disabled>Select Unit</option>
+                            <!-- Options will be loaded dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="pricePerUnit" class="form-label">Price Per Unit</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₹</span>
+                            <input type="number" class="form-control" id="pricePerUnit" name="price_per_unit" step="0.01" min="0.01" required>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/products" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Update Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/products.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        initProductForm(true, {{ product_id }});
+    });
+</script>
+{% endblock %}

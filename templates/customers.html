@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Customers - Grocery Store Management{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Customers</h1>
+            <a href="/customers/add" class="btn btn-primary">Add New Customer</a>
+        </div>
+        
+        <div id="customersContainer">
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/customers.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        initCustomersPage();
+    });
+</script>
+{% endblock %}

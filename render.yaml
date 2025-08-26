@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: grocery-store-app
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /health
+    envVars:
+      - key: CONFIG_MODULE
+        value: config_render
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: DB_HOST
+        fromDatabase:
+          name: grocery-store-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: grocery-store-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: grocery-store-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: grocery-store-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: grocery-store-db
+          property: password
+
+databases:
+  - name: grocery-store-db
+    databaseName: grocery_store
+    user: grocery_admin
+    plan: free
